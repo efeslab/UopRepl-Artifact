@@ -1,0 +1,57 @@
+# This is a sample Python script.
+import os
+
+# Press Shift+F10 to execute it or replace it with your code.
+# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import pandas
+import pathlib
+import sys
+import argparse
+
+def choose_largest_traces(trace_dir: pathlib.Path, choose_num: int):
+    return sorted(trace_dir.iterdir(), key=lambda x: x.stat().st_size, reverse=True)[
+        0:choose_num
+    ]
+
+
+def main():
+    argparser = argparse.ArgumentParser()
+    argparser.add_argument("--trace_path", type=str, required=True)
+    argparser.add_argument("--inst_count", type=int, required=True)
+    args = argparser.parse_args()
+    
+    outputFolder = pathlib.Path.cwd()
+    configFolder = outputFolder/"config"
+    config3 = open("pure.config","r").read()
+
+    traceBase = pathlib.Path(args.trace_path)
+    appList = ["kafka" ,"mysql", "postgres","clang","cassandra","finagle-chirper","python","tomcat","mediawiki","drupal","wordpress"]
+    dirList = ["kafka", "mysql_large", "pgbench","clang","cassandra","finagle-chirper","python/original","tomcat","mediawiki","drupal","wordpress"]
+
+    for app_idx, app in enumerate(appList):
+        chosen = choose_largest_traces(traceBase/dirList[app_idx],10)
+        inst_count = args.inst_count
+        for i in range(len(chosen)):
+            configName = "{}_{}.config".format(app, i)
+            genOut=open(configFolder/configName,"w")
+            genOut.write(config3.format(chosen[i], inst_count))
+            genOut.close()
+
+            # genOut=open(configFolder/"{}_lru_{}.config".format(app, i),"w")
+            # genOut.write(lru_config.format(chosen[i],inst_count))
+            # genOut.close()
+
+            # genOut=open(configFolder/"{}_srrip_{}.config".format(app, i),"w")
+            # genOut.write(srrip_config.format(chosen[i],inst_count))
+            # genOut.close()
+
+            # genOut=open(configFolder/"{}_ship_{}.config".format(app, i),"w")
+            # genOut.write(ship_config.format(chosen[i],inst_count))
+            # genOut.close()
+    print("finish")
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    main()
+
+# See PyCharm help at https://www.jetbrains.com/help/pycharm/
