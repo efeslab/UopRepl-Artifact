@@ -1,0 +1,3 @@
+/code/scripts/2-prepare-traces/phase2/traceCopy/build/CMakeFiles/copyTrace.dir
+/code/scripts/2-prepare-traces/phase2/traceCopy/build/CMakeFiles/edit_cache.dir
+/code/scripts/2-prepare-traces/phase2/traceCopy/build/CMakeFiles/rebuild_cache.dir
